@@ -10,6 +10,7 @@ body :
 }
 
 #### this route adds books to the db 
+
 --------------------------------------------------------------------------------------------------------------
 ##  GET
 ### localhost:6565/book-management/list
@@ -22,6 +23,7 @@ query :
 #### this route provides lists of all the books or the details of provided book id
 In query you can pass page and limit for pagination if not provided youll get first 100 data
 ?bk_id=BOOKID it will give the details of the corresponding book id
+
 --------------------------------------------------------------------------------------------------------------
 ##  PATCH
 ### localhost:6565/book-management/update/:book_id
@@ -33,6 +35,7 @@ body:{
 }
 
 #### this route upadate the data provided in body for given book_id in params
+
 --------------------------------------------------------------------------------------------------------------
 ##  DELETE
 ### localhost:6565/book-management/delete/:book_id
