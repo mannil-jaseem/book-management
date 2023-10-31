@@ -44,6 +44,10 @@ module.exports = {
                     data: resp,
                     message: 'success'
                 })
+            } else if (resp) {
+                return res.json({
+                    message: 'no records found for the given id'
+                })
             } else {
                 return res.json({
                     message: 'error while fetching data'
@@ -62,16 +66,19 @@ module.exports = {
             let TITLE = req.body.title ?? null,
                 AUTHOR = req.body.author ?? null,
                 SUMMARY = req.body.summary ?? null
-            let resp = await mongoose.models.Books.findOneAndUpdate(
+            let resp = await mongoose.models.Books.updateOne(
                 { BOOK_ID: id },
                 { TITLE, AUTHOR, SUMMARY },
                 { new: true }
             )
-            // send response if data is updated else error message
-            if (resp && Object.keys(resp).length) {
+            // send response if data is deleted else error message
+            if (resp.hasOwnProperty('modifiedCount') && resp.modifiedCount == 0) {
                 return res.json({
-                    data: resp,
-                    message: 'success'
+                    message: 'please provide a valid book_id'
+                })
+            } else if (resp?.modifiedCount) {
+                return res.json({
+                    message: 'data updated successfully'
                 })
             } else {
                 return res.json({
@@ -89,15 +96,15 @@ module.exports = {
         try {
             let { id } = req.params
             let resp = await mongoose.models.Books.deleteOne({ BOOK_ID: id })
-            c// send response if data is deleted else error message
-            if (resp?.deletedCount) {
+            console.log(resp);
+            // send response if data is deleted else error message
+            if (resp.hasOwnProperty('deletedCount') && resp.deletedCount == 0) {
+                return res.json({
+                    message: 'please provide a valid book_id'
+                })
+            } else if (resp?.deletedCount) {
                 return res.json({
                     message: 'data deleted successfully'
-                })
-            }
-            if (resp && Object.keys(resp).length) {
-                return res.json({
-                    message: 'no data found'
                 })
             } else {
                 return res.json({
